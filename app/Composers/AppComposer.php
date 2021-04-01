@@ -61,7 +61,13 @@ class AppComposer
      */
     public function compose(View $view)
     {
-        $view->withAboutApp(Markdown::convertToHtml($this->config->get('setting.app_about')));
+        if ($this->config->get('setting.app_about')) {
+            $about = Markdown::convertToHtml($this->config->get('setting.app_about'));
+        } else {
+            $about = '';
+        }
+        
+        $view->withAboutApp($about);
         $view->withAppAnalytics($this->config->get('setting.app_analytics'));
         $view->withAppAnalyticsGoSquared($this->config->get('setting.app_analytics_gs'));
         $view->withAppAnalyticsPiwikUrl($this->config->get('setting.app_analytics_piwik_url'));
@@ -81,6 +87,7 @@ class AppComposer
         $view->withAutomaticLocalization($this->config->get('setting.automatic_localization'));
         $view->withEnableExternalDependencies($this->config->get('setting.enable_external_dependencies'));
         $view->withShowTimezone($this->config->get('setting.show_timezone'));
+        $view->withAppRefreshRate($this->config->get('setting.app_refresh_rate'));
         $view->withTimezone($this->dates->getTimezone());
         $view->withSiteTitle($this->config->get('setting.app_name'));
         $view->withFontSubset($this->config->get('langs.'.$this->config->get('app.locale').'.subset', 'latin'));
